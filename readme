@@ -1,0 +1,23 @@
+The Blockchain-Based Microloan Platform is a secure, transparent, and efficient system designed to connect borrowers and lenders through microloans. Built using Python, Flask, and Multichain blockchain technology, the platform ensures that every loan transaction is traceable, immutable, and tamper-proof.
+Key Features and Functionality:
+User Roles and Dashboards:
+Borrowers: Can request microloans, track the status of their loans, and view repayment progress.
+Lenders: Can review loan requests, fund loans, and monitor borrower repayments.
+Admins: Oversee platform activity  track blockchain statistics  , approve or reject loans audit is yet to be added .
+Secure Transactions:
+All loan requests and approvals are recorded in JSON files locally and synchronized with a Multichain blockchain, ensuring transparency and security.
+User passwords are hashed for secure authentication.
+
+Loan Management Workflow:
+Borrowers create loan requests via a simple form.
+Lenders fund loans after reviewing requests; transactions are verified and stored securely.
+Admins provide the final approval or rejection of loans, ensuring oversight and compliance.
+
+Web Interface:
+User-friendly dashboards for all roles.
+Real-time updates on loans, borrowers, and lenders.
+Responsive design using Bootstrap, with a modern, intuitive UI.
+
+Blockchain Integration:
+Every transaction and loan activity is published to a blockchain stream using Multichain, providing a decentralized ledger of loan activity.
+This ensures immutability, auditability, and trust in all operations
