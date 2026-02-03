@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - BlockLoan{% endblock %}
+
+{% block content %}
+<header>
+    <nav>
+        <h1>BlockLoan - Admin Dashboard</h1>
+        <div>
+            <span>Welcome, {{ username }} (Admin)</span>
+        </div>
+    </nav>
+</header>
+
+<div class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ 'error' if category == 'danger' else category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="dashboard-grid">
+        <div class="stat-card">
+            <h3>Total Loans</h3>
+            <div class="value">{{ total_loans }}</div>
+        </div>
+        <div class="stat-card">
+            <h3>Initial Requests (Pending)</h3>
+            <div class="value">{{ total_pending }}</div> 
+        </div>
+        <div class="stat-card">
+            <h3>Total Borrowers</h3>
+            <div class="value">{{ borrowers|length }}</div>
+        </div>
+        <div class="stat-card">
+            <h3>Total Lenders</h3>
+            <div class="value">{{ lenders|length }}</div>
+        </div>
+    </div>
+
+    <h2 style="margin-top: 2rem; margin-bottom: 1rem;">Loans Awaiting Final Funding Approval</h2>
+    
+    {% if pending_loans %}
+    <table>
+        <thead>
+            <tr>
+                <th>Loan ID</th>
+                <th>Borrower (Anon)</th>
+                <th>Lender</th>
+                <th>Amount</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for loan in pending_loans %}
+            <tr>
+                <td>{{ loan.id }}</td> 
+                <td>{{ loan.borrower_anon_id }}</td> 
+                <td>{{ loan.lender_username or 'N/A' }}</td>
+                <td>${{ "%.2f"|format(loan.amount) }}</td>
+                <td><span class="status-{{ loan.status }}">{{ loan.status.upper() }}</span></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="text-align: center; color: #999; padding: 2rem;">No loans awaiting final funding approval.</p>
+    {% endif %}
+
+    <h2 style="margin-top: 2rem; margin-bottom: 1rem;">All Users</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Role</th>
+                <th>Balance</th>
+                <th>Joined</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in borrowers + lenders %}
+            <tr>
+                <td>{{ user.username }}</td>
+                <td>{{ user.role.upper() }}</td>
+                <td>${{ "%.2f"|format(user.balance) }}</td>
+                <td>{{ user.created_at[:10] if user.created_at else 'N/A' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}BlockLoan - Welcome{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 4rem 2rem;">
+    <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">Blockchain Micro Loan Platform</h2>
+    <p style="font-size: 1.2rem; margin-bottom: 2rem;">Borrow and lend money securely and transparently on the blockchain</p>
+
+    <div class="grid">
+        <div class="card">
+            <h3>Login as Borrower</h3>
+            <p>Access your borrower dashboard and request loans quickly.</p>
+            <a href="{{ url_for('login') }}?role=borrower"><button>Login as Borrower</button></a>
+        </div>
+
+        <div class="card">
+            <h3>Login as Lender</h3>
+            <p>Access your lender dashboard and fund loans securely.</p>
+            <a href="{{ url_for('login') }}?role=lender"><button>Login as Lender</button></a>
+        </div>
+        <div class="card">
+    <h3>Login as Admin</h3>
+    <p>Access the admin dashboard to manage users and approve loans.</p>
+    <a href="{{ url_for('login') }}?role=admin"><button>Login as Admin</button></a>
+</div>
+        </div>
+    </div>
+</div>
+{% endblock %}

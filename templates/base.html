@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Importing Poppins for a modern, clean look -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+<style>
+    /* -------------------------------------- */
+    /* --- Professional Dark Theme (Base) --- */
+    /* -------------------------------------- */
+
+    /* Color Variables for Consistency (Deep Blue/Glassmorphism) */
+    :root {
+        --bg-color: #0f172a; /* Deep Space Blue */
+        --card-bg: rgba(30, 41, 59, 0.7); /* Translucent Card Background */
+        --primary: #3b82f6; /* Vibrant Blue for Actions */
+        --primary-dark: #2563eb;
+        --accent: #8b5cf6; /* Rich Purple for Lending/Highlight */
+        --text-main: #f8fafc; /* Near-White Text */
+        --text-muted: #94a3b8; /* Subtle Grey Text */
+        --glass-border: rgba(255, 255, 255, 0.15); /* Light, thin border for glass effect */
+        --success: #10b981; /* Green for Success/Active */
+        --danger: #ef4444; /* Red for Rejection/Error */
+        --warning: #fbbf24; /* Yellow/Amber for Pending/Waiting */
+    }
+
+    /* Reset and Base Styles */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { 
+        font-family: 'Poppins', sans-serif; 
+        background-color: var(--bg-color); 
+        color: var(--text-main); 
+        line-height:1.6; 
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background: radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.1), transparent 50%),
+                    radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.1), transparent 50%),
+                    var(--bg-color);
+        background-attachment: fixed;
+    }
+
+    /* Header & Navigation */
+    header { 
+        background: rgba(15, 23, 42, 0.8); /* Slightly darker, translucent header */
+        backdrop-filter: blur(10px);
+        padding:1.5rem 2rem; 
+        display:flex; 
+        justify-content:space-between; 
+        align-items:center; 
+        border-bottom: 1px solid var(--glass-border);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    header h1 { 
+        font-size:2rem; 
+        font-weight:700; 
+        color: var(--text-main);
+        display: flex;
+        align-items: center;
+    }
+    header h1 i {
+        color: var(--primary);
+        margin-right: 10px;
+        font-size: 1.5rem;
+    }
+
+    nav a { 
+        color: var(--text-main); 
+        text-decoration:none; 
+        margin-left:1.5rem; 
+        font-weight:500; 
+        transition: all 0.3s ease; 
+        padding:0.5rem 1rem; 
+        border-radius:8px; 
+    }
+    nav a:hover { 
+        color: var(--primary); 
+        background: rgba(59, 130, 246, 0.1);
+    }
+
+    /* Main Layout */
+    .container { 
+        max-width:1200px; 
+        margin:2rem auto; 
+        padding:0 1.5rem; 
+        flex-grow: 1; /* Allows container to push footer down */
+    }
+
+    /* Card Component (Glassmorphism Effect) */
+    .card { 
+        background: var(--card-bg); 
+        backdrop-filter: blur(12px);
+        border-radius:16px; 
+        padding:2rem; 
+        box-shadow:0 8px 32px 0 rgba(0, 0, 0, 0.2); 
+        border: 1px solid var(--glass-border);
+        margin-bottom:2rem; 
+        transition: all 0.3s ease; 
+    }
+    .card:hover { 
+        transform: translateY(-3px); 
+        box-shadow:0 15px 40px rgba(0, 0, 0, 0.3); 
+    }
+
+    /* Dashboard Grid */
+    .dashboard-grid { 
+        display:grid; 
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+        gap:2rem; 
+        margin-top:2rem; 
+        margin-bottom: 2rem;
+    }
+    .stat-card {
+        background: var(--card-bg);
+        backdrop-filter: blur(10px);
+        border-radius: 12px;
+        padding: 1.5rem;
+        border: 1px solid var(--glass-border);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .stat-card:hover {
+        transform: scale(1.02);
+        box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
+    }
+    .stat-card h3 {
+        color: var(--text-muted);
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+    }
+    .stat-card .value {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: var(--primary);
+    }
+
+    /* Form Elements */
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: var(--text-muted);
+        font-weight: 500;
+        font-size: 0.95rem;
+    }
+    input, textarea, select { 
+        width:100%; 
+        padding:1rem; 
+        border:1px solid var(--glass-border); 
+        border-radius:12px; 
+        font-size:1rem; 
+        font-family:inherit; 
+        background: rgba(30, 41, 59, 0.5); /* Semi-transparent input background */
+        color: var(--text-main);
+        transition: all 0.3s ease; 
+    }
+    input:focus, textarea:focus, select:focus { 
+        outline:none; 
+        border-color:var(--primary); 
+        box-shadow:0 0 8px rgba(59, 130, 246, 0.5); 
+        background: rgba(30, 41, 59, 0.8);
+    }
+
+    /* Buttons */
+    .nav-btn { /* Style for buttons used in navigation/primary actions */
+        background: var(--primary); 
+        color: var(--bg-color); 
+        border:none; 
+        padding:0.75rem 1.5rem; 
+        border-radius:50px; 
+        font-weight:600; 
+        cursor:pointer; 
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+    }
+    .nav-btn:hover { 
+        background: var(--primary-dark); 
+        transform:translateY(-2px); 
+        box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4); 
+    }
+
+    /* Authentication Button (used on Login/Register/New Loan) */
+    .auth-btn {
+        width: 100%;
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        color: white;
+        border: none;
+        padding: 1rem;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+    }
+    .auth-btn:hover {
+        opacity: 0.9;
+        transform: scale(1.01);
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6);
+    }
+
+    /* Tables (Professional Dark Mode Style) */
+    table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 0.8rem;
+        margin-top: 1rem;
+        color: var(--text-main);
+    }
+
+    thead th {
+        text-align: left;
+        padding: 1rem;
+        color: var(--text-muted);
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        font-weight: 600;
+    }
+
+    tbody tr {
+        background: rgba(30, 41, 59, 0.4); /* Subtle dark background for rows */
+        transition: background 0.3s, transform 0.3s;
+    }
+
+    tbody tr:hover {
+        background: rgba(30, 41, 59, 0.7);
+        transform: scale(1.005);
+    }
+
+    td {
+        padding: 1.2rem 1rem;
+        border-top: 1px solid var(--glass-border);
+        border-bottom: 1px solid var(--glass-border);
+    }
+
+    /* Rounded corners for the first and last cells in a row to create card-like row effect */
+    td:first-child { 
+        border-left: 1px solid var(--glass-border); 
+        border-top-left-radius: 10px; 
+        border-bottom-left-radius: 10px; 
+    }
+    td:last-child { 
+        border-right: 1px solid var(--glass-border); 
+        border-top-right-radius: 10px; 
+        border-bottom-right-radius: 10px; 
+    }
+
+    /* Flash Messages/Alerts */
+    .alert {
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        font-weight: 500;
+    }
+    .alert-success {
+        background: rgba(16, 185, 129, 0.2);
+        color: var(--success);
+        border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+    .alert-danger {
+        background: rgba(239, 68, 68, 0.2);
+        color: var(--danger);
+        border: 1px solid rgba(239, 68, 68, 0.4);
+    }
+    .alert-info {
+        background: rgba(59, 130, 246, 0.2);
+        color: var(--primary);
+        border: 1px solid rgba(59, 130, 246, 0.4);
+    }
+    
+    /* Default button (if not .nav-btn or .auth-btn) */
+    button {
+        background: var(--primary); 
+        color: var(--bg-color); 
+        border:none; 
+        padding:0.6rem 1.2rem; 
+        border-radius:6px; 
+        font-weight:500; 
+        cursor:pointer; 
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 5px rgba(59, 130, 246, 0.2);
+    }
+
+    button:hover {
+        background: var(--primary-dark);
+        color: white;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        header { 
+            flex-direction: column; 
+            padding: 1rem;
+        }
+        nav { 
+            margin-top: 1rem;
+        }
+        nav a { 
+            margin: 0.5rem 0.5rem; 
+            display: inline-block;
+        }
+        .container {
+            padding: 0 0.5rem;
+            margin: 1rem auto;
+        }
+    }
+</style>
+{% block extra_css %}{% endblock %}
+</head>
+<body>
+<header>
+    <!-- ADDED ICON for Professional Look (No structural change) -->
+    <h1><i class="fas fa-cube"></i>BlockLoan</h1> 
+    <nav>
+        {% if session.get("user_id") %}
+            <!-- User is logged in -->
+            {% if request.endpoint == 'about' %}
+                <a href="{{ url_for('index') }}">Home</a>
+            {% else %}
+                <a href="{{ url_for('about') }}">About</a>
+            {% endif %}
+            <a href="{{ url_for('logout') }}" style="background: var(--danger); color: white; padding:0.5rem 1rem; border-radius: 8px;">Logout</a>
+        {% else %}
+            <!-- User is NOT logged in -->
+            {% if request.endpoint == 'about' %}
+                <a href="{{ url_for('index') }}">Home</a>
+            {% else %}
+                <a href="{{ url_for('about') }}">About</a>
+            {% endif %}
+            <a href="{{ url_for('login') }}" class="nav-btn" style="background: none; color: var(--primary); border: 1px solid var(--primary); padding: 0.5rem 1rem; margin-right: 0.5rem;">Login</a>
+            <a href="{{ url_for('register') }}" class="nav-btn" style="background: var(--accent); color: white;">Register</a>
+        {% endif %}
+    </nav>
+</header>
+
+<div class="container">
+    {% block content %}{% endblock %}
+</div>
+</body>
+</html>  

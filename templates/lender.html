@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+
+{% block title %}Lender Dashboard - BlockLoan{% endblock %}
+
+{% block content %}
+<header>
+    <nav style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background-color: #2196f3; color: #fff; border-radius: 0 0 10px 10px;">
+        <h1 style="margin: 0; font-size: 1.5rem;">BlockLoan - Lender Dashboard</h1>
+        <span>Welcome, <strong>{{ username }}</strong>!</span>
+    </nav>
+</header>
+
+<div class="container" style="padding: 2rem;">
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-container">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'danger' if category == 'danger' else 'success' }}">
+                        {{ message|safe }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Dashboard Stats -->
+    <div class="dashboard-grid">
+        <div class="stat-card">
+            <h3>Your Balance</h3>
+            <div class="value">${{ "%.2f"|format(balance) }}</div>
+        </div>
+        <div class="stat-card">
+            <h3>Available Loans</h3>
+            <div class="value">{{ available_loans|length }}</div>
+        </div>
+        <div class="stat-card">
+            <h3>Loans Funded</h3>
+            <div class="value">{{ funded_loans|length }}</div>
+        </div>
+        <div class="stat-card">
+            <h3>Total Active</h3>
+            <div class="value">{{ total_loans }}</div>
+        </div>
+    </div>
+
+    <!-- Available Loans Table -->
+    <h2 style="margin-top: 3rem; margin-bottom: 1rem;">Available Loans to Fund</h2>
+    {% if available_loans %}
+    <table class="loan-table">
+        <thead>
+            <tr>
+                <th>Loan ID</th>
+                <th>Borrower</th>
+                <th>Amount</th>
+                <th>Duration</th>
+                <th>Created</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for loan in available_loans %}
+            <tr>
+                <td>{{ loan.id }}</td>
+                <td>{{ loan.borrower_anon_id }}</td>
+                <td>${{ "%.2f"|format(loan.amount) }}</td>
+                <td>{{ loan.duration_months }} months</td>
+                <td>{{ loan.created_at[:10] }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('fund_loan_route', loan_id=loan.id) }}" style="display: inline;">
+                        <button type="submit" class="btn btn-primary"
+                                onclick="return confirm('Are you sure you want to fund this loan of ${{ '%.2f'|format(loan.amount) }}?');">
+                            Fund
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="empty-message">No loans available to fund right now.</p>
+    {% endif %}
+
+    <!-- Funded Loans Table -->
+    <h2 style="margin-top: 3rem; margin-bottom: 1rem;">My Funded Loans</h2>
+    {% if funded_loans %}
+    <table class="loan-table">
+        <thead>
+            <tr>
+                <th>Loan ID</th>
+                <th>Borrower</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Funded Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for loan in funded_loans %}
+            <tr>
+                <td>{{ loan.id }}</td>
+                <td>{{ loan.borrower_anon_id }}</td>
+                <td>${{ "%.2f"|format(loan.amount) }}</td>
+                <td><span class="status-{{ loan.status }}">{{ loan.status.replace('_', ' ').title() }}</span></td>
+                <td>{{ loan.funded_at[:10] if loan.funded_at else 'N/A' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="empty-message">You haven't funded any loans yet.</p>
+    {% endif %}
+</div>
+
+<!-- Styles -->
+<style>
+/* Flash Messages */
+.flash-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    max-width: 400px;
+    z-index: 9999;
+}
+.alert {
+    padding: 12px 20px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    color: #fff;
+    font-weight: 500;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+.alert-success { background-color: #28a745; }
+.alert-danger  { background-color: #dc3545; }
+
+/* Dashboard Cards */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+    margin-top: 2rem;
+}
+.stat-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+}
+.stat-card h3 { color: #555; font-size: 1rem; margin-bottom: 10px; }
+.stat-card .value { font-size: 1.5rem; font-weight: bold; color: #2196f3; }
+
+/* Tables */
+.loan-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+.loan-table th, .loan-table td { padding: 12px 15px; text-align: left; }
+.loan-table thead { background-color: #2196f3; color: #fff; }
+.loan-table tbody tr:nth-child(even) { background-color: #f2f2f2; }
+.loan-table tbody tr:hover { background-color: #e0f0ff; }
+
+/* Status */
+.status-approved_by_lender { color: #28a745; font-weight: bold; }
+.status-pending { color: #ffc107; font-weight: bold; }
+.status-rejected { color: #dc3545; font-weight: bold; }
+
+/* Buttons */
+.btn-primary {
+    background-color: #2196f3;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+}
+.btn-primary:hover { background-color: #1976d2; }
+
+/* Empty messages */
+.empty-message {
+    text-align: center;
+    color: #999;
+    padding: 2rem;
+    font-style: italic;
+}
+</style>
+
+<!-- Optional JS for auto-hide flash messages -->
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const alerts = document.querySelectorAll('.flash-container .alert');
+        alerts.forEach(alert => {
+            setTimeout(() => {
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 500);
+            }, 4000);
+        });
+    });
+</script>
+
+{% endblock %}

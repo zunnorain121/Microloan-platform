@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Register - BlockLoan{% endblock %}
+
+{% block content %}
+<div class="auth-page">
+    <div class="auth-card" style="position: relative; max-width: 500px;">
+        <!-- Back to Home Arrow (Top Left) -->
+        <a href="/" style="position: absolute; top: 1.5rem; left: 1.5rem; color: var(--text-muted); transition: color 0.3s;" 
+           onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#94a3b8'" title="Back to Home">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+        </a>
+
+        <h2 style="margin-bottom: 1.5rem; font-weight: 600; margin-top: 1rem;">Create Account</h2>
+
+        <!-- Dynamic Header based on Role -->
+        <p id="role-display" style="color: var(--primary); margin-bottom: 1.5rem; font-weight: 500;"></p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST">
+            <!-- Username & Password -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Password" required>
+                </div>
+            </div>
+
+            <!-- Contact Info -->
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="you@example.com" required>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" placeholder="+1234567890" required>
+                </div>
+                <div class="form-group">
+                    <label for="cnic">CNIC / ID Number</label>
+                    <input type="text" id="cnic" name="cnic" placeholder="Identity Number" required>
+                </div>
+            </div>
+
+            <!-- Role Selection -->
+            <input type="hidden" id="role" name="role" value="borrower"> 
+
+            <button type="submit" class="auth-btn" style="width: 100%;">Register</button>
+        </form>
+
+        <div class="auth-links">
+            Already have an account? <a href="/login">Login</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const roleParam = urlParams.get('role');
+    
+    if (roleParam) {
+        document.getElementById('role').value = roleParam;
+        const display = document.getElementById('role-display');
+        if(roleParam === 'lender') {
+            display.innerText = "Signing up as an Investor";
+        } else if (roleParam === 'borrower') {
+            display.innerText = "Signing up to Borrow Funds";
+        } else if (roleParam === 'admin') {
+            display.innerText = "Signing up as an Admin";
+        }
+    }
+</script>
+{% endblock %}

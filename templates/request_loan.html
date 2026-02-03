@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}Request New Loan - BlockLoan{% endblock %}
+
+{% block content %}
+<header>
+    <nav>
+        <h1>BlockLoan - Request Loan</h1>
+        <div>
+            <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+            <a href="{{ url_for('logout') }}" style="margin-left: 1rem;">Logout</a>
+        </div>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="form-container">
+        <h2 style="margin-bottom: 2rem; text-align: center; color: #1a1a2e;">Request a Loan</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'error' if category == 'danger' else category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" enctype="multipart/form-data" class="card">
+
+            <!-- 🔵 FIXED INTEREST INFO -->
+            <div class="info-box" style="
+                background: #e8f0ff;
+                padding: 1rem;
+                border-left: 4px solid #3b82f6;
+                border-radius: 6px;
+                margin-bottom: 1.5rem;
+                color: #1a2b4c;
+                font-size: 0.95rem;">
+                <strong>Important:</strong> BlockLoan applies a <strong>fixed 10% interest rate</strong> on all loans.
+            </div>
+
+            <div class="form-group">
+                <label for="amount">Loan Amount ($)</label>
+                <input type="number" id="amount" name="amount" min="100" max="100000" step="0.01" required placeholder="Enter amount">
+            </div>
+
+            <div class="form-group">
+                <label for="duration">Duration (months)</label>
+                <select id="duration" name="duration" required>
+                    <option value="6">6 months</option>
+                    <option value="12" selected>12 months</option>
+                    <option value="24">24 months</option>
+                    <option value="36">36 months</option>
+                </select>
+            </div>
+
+            <!-- 🔥 NEW LIVE CALCULATION BOX -->
+            <div id="loanPreview" style="
+                display: none;
+                background: #f0fdfa;
+                padding: 1rem;
+                border-left: 4px solid #0d9488;
+                border-radius: 6px;
+                margin-bottom: 1.5rem;
+                color: #064e3b;
+                font-size: 0.95rem;">
+                <strong>Estimated Repayment:</strong>
+                <div id="repaymentText" style="margin-top: 0.3rem;"></div>
+            <div class="form-group">
+                <label for="description">Why do you need this loan?</label>
+                <textarea id="description" name="description" rows="3" required placeholder="Explain why you need this loan..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="proof_of_income">Upload Proof of Income (PDF/JPG/PNG)</label>
+                <input type="file" id="proof_of_income" name="proof_of_income" accept=".pdf,.jpg,.jpeg,.png" required>
+            </div>
+
+            <div style="display: flex; gap: 1rem;">
+                <button type="submit" style="flex: 1;">Submit Loan Request</button>
+                <a href="{{ url_for('dashboard') }}" style="flex: 1;">
+                    <button type="button" style="width: 100%; background-color: #666;">Cancel</button>
+                </a>
+            </div>
+        </form>
+
+        <div class="card" style="margin-top: 2rem; background-color: #f9f9f9;">
+            <h3>Loan Information</h3>
+            <ul style="margin-left: 1.5rem; line-height: 1.8;">
+                <li>Minimum loan amount: $100</li>
+                <li>Maximum loan amount: $100,000</li>
+                <li><strong>Fixed platform interest rate: 10%</strong></li>
+                <li>All transactions are recorded on the blockchain</li>
+                <li>Your loan request will be reviewed by lenders in the network</li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+
+<!-- 🔥 NEW: Live Calculator Script -->
+<script>
+    const amount = document.getElementById("amount");
+    const duration = document.getElementById("duration");
+    const previewBox = document.getElementById("loanPreview");
+    const repaymentText = document.getElementById("repaymentText");
+
+    function updatePreview() {
+        let amt = parseFloat(amount.value);
+        let months = parseInt(duration.value);
+
+        if (!amt || amt < 100) {
+            previewBox.style.display = "none";
+            return;
+        }
+
+        let interest = amt * 0.10;                 // 10%
+        let total = amt + interest;
+
+        previewBox.style.display = "block";
+        repaymentText.innerHTML =
+            `$${amt.toFixed(2)} + $${interest.toFixed(2)} (10% interest) = <strong>$${total.toFixed(2)}</strong> total repayment.`;
+    }
+
+    amount.addEventListener("input", updatePreview);
+    duration.addEventListener("change", updatePreview);
+</script>
+
+{% endblock %}

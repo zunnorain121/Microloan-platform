@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Borrower Dashboard - BlockLoan{% endblock %}
+
+{% block content %}
+<header class="header" style="background-color:#1E40AF; color:white; padding:1rem 2rem; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+    <nav class="navbar" style="display:flex; justify-content:space-between; align-items:center;">
+        <h1 style="margin:0; font-size:1.8rem;">BlockLoan - Borrower Dashboard</h1>
+        <div class="nav-right" style="display:flex; gap:1rem; align-items:center;">
+            <span>Welcome, <strong>{{ username }}</strong>!</span>
+            <a href="{{ url_for('logout') }}" class="btn-logout" style="padding:0.5rem 1rem; background:#EF4444; color:white; border-radius:5px; text-decoration:none; font-weight:bold;">Logout</a> 
+        </div>
+    </nav>
+</header>
+
+<main class="container" style="padding:2rem;">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="alerts" style="margin-bottom:1.5rem;">
+            {% for category, message in messages %}
+                <div class="alert alert-{{ 'danger' if category == 'danger' else category }}" 
+                     style="padding:1rem; margin-bottom:0.5rem; border-radius:5px; background:#FECACA; color:#B91C1C;">
+                     {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
+
+    <section class="dashboard-grid" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1.5rem;">
+        <div class="stat-card stat-blue" style="background:#3B82F6; color:white; padding:1.5rem; border-radius:10px; text-align:center;">
+            <h3>Your Balance</h3>
+            <p class="stat-value" style="font-size:1.5rem; font-weight:bold;">${{ "%.2f"|format(balance) }}</p>
+        </div>
+        <div class="stat-card stat-blue" style="background:#3B82F6; color:white; padding:1.5rem; border-radius:10px; text-align:center;">
+            <h3>Total Lenders</h3>
+            <p class="stat-value" style="font-size:1.5rem; font-weight:bold;">{{ total_lenders }}</p>
+        </div>
+        <div class="stat-card stat-blue" style="background:#3B82F6; color:white; padding:1.5rem; border-radius:10px; text-align:center;">
+            <h3>Total Borrowers</h3>
+            <p class="stat-value" style="font-size:1.5rem; font-weight:bold;">{{ total_borrowers }}</p>
+        </div>
+        <div class="stat-card stat-blue" style="background:#3B82F6; color:white; padding:1.5rem; border-radius:10px; text-align:center;">
+            <h3>Active Loans</h3>
+            <p class="stat-value" style="font-size:1.5rem; font-weight:bold;">{{ total_loans }}</p>
+        </div>
+    </section>
+
+    <section class="request-action" style="margin:3rem 0; text-align:center;">
+        <h2 style="margin-bottom:1rem; color:#1E40AF;">Need Funds?</h2>
+        <a href="{{ url_for('request_loan') }}" class="btn-primary-large" 
+           style="padding:1rem 2rem; background:#2563EB; color:white; border-radius:8px; font-size:1.2rem; font-weight:bold; text-decoration:none; transition:0.3s;"
+           onmouseover="this.style.background='#1D4ED8';" onmouseout="this.style.background='#2563EB';">
+            + Request New Loan
+        </a>
+    </section>
+
+    <section class="my-loans" style="margin-top:3rem;">
+        <h2 style="color:#1E40AF; margin-bottom:1rem;">My Loan Requests History</h2>
+        {% if my_loans %}
+        <table class="loans-table" style="width:100%; border-collapse:collapse; box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+            <thead style="background:#3B82F6; color:white;">
+                <tr>
+                    <th style="padding:0.8rem; text-align:left;">Loan ID</th>
+                    <th style="padding:0.8rem; text-align:left;">Amount</th>
+                    <th style="padding:0.8rem; text-align:left;">Duration (months)</th>
+                    <th style="padding:0.8rem; text-align:left;">Status</th>
+                    <th style="padding:0.8rem; text-align:left;">Created</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for loan in my_loans %}
+                <tr style="border-bottom:1px solid #E5E7EB;">
+                    <td style="padding:0.8rem;">{{ loan.id }}</td>
+                    <td style="padding:0.8rem;">${{ "%.2f"|format(loan.amount) }}</td>
+                    <td style="padding:0.8rem;">{{ loan.duration_months }}</td>
+                    <td style="padding:0.8rem;">
+                        <span class="status status-{{ loan.status|lower }}" 
+                              style="padding:0.3rem 0.6rem; border-radius:5px; background:#F3F4F6; color:#111;">
+                            {{ loan.status.replace('_',' ').title() }}
+                        </span>
+                    </td>
+                    <td style="padding:0.8rem;">{{ loan.created_at[:10] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="no-loans" style="margin-top:1rem; font-style:italic; color:#6B7280;">
+            You haven't requested any loans yet. Click the button above to start.
+        </p>
+        {% endif %}
+    </section>
+</main>
+{% endblock %}

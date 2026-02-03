@@ -1,0 +1,53 @@
+{% if role == 'borrower' %}
+    <div id="borrowerDashboard">
+        ...
+        <div class="card">
+            <h3>Request New Loan</h3>
+            <!-- Borrowers no longer enter interest here -->
+            <a href="{{ url_for('request_loan') }}">
+                <button style="width: 100%;">Go to Loan Request Form</button>
+            </a>
+        </div>
+        ...
+    </div>
+{% elif role == 'lender' %}
+    <div id="lenderDashboard">
+        ...
+        <div class="card">
+            <h3>Available Loans to Fund</h3>
+            <table id="availableLoans">
+                <thead>
+                    <tr>
+                        <th>Borrower</th>
+                        <th>Amount</th>
+                        <th>Duration</th>
+                        <th>Created</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for loan in pending_loans %}
+                    <tr>
+                        <td>{{ loan.borrower_username }}</td>
+                        <td>${{ loan.amount }}</td>
+                        <td>{{ loan.duration_months }} months</td>
+                        <td>{{ loan.created_at }}</td>
+                        <td>
+                            <form method="POST" action="{{ url_for('fund_loan') }}">
+                                <input type="hidden" name="loan_id" value="{{ loan.id }}">
+                                <!-- Lender sets interest rate here -->
+                                <input type="number" name="interest_rate" placeholder="Interest %" step="0.1" min="1" max="50" required>
+                                <button type="submit">Fund</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% if pending_loans|length == 0 %}
+                    <tr><td colspan="5">No loans available to fund.</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+        ...
+    </div>
+{% endif %}

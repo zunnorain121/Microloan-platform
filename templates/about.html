@@ -1,0 +1,275 @@
+{% extends "base.html" %}
+
+{% block title %}About BlockLoan{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* ------------------------------------------ */
+/*      GLOBAL THEME – CYBER NEON BLUE        */
+/* ------------------------------------------ */
+main {
+    padding: 4rem 1.5rem;
+    background: #0a0f1c !important;
+    min-height: 100vh;
+    color: #d3e8ff !important;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Glow Line */
+.glow-line {
+    height: 2px;
+    width: 160px;
+    background: linear-gradient(90deg, #0050ff, #57c1ff, #0050ff);
+    margin: 1rem auto 2.5rem;
+    filter: drop-shadow(0 0 6px #3ba9ff);
+    border-radius: 50px;
+}
+
+/* ------------------------------------------ */
+/*                HERO SECTION                */
+/* ------------------------------------------ */
+.hero {
+    text-align: center;
+    margin-bottom: 3.5rem;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    font-weight: 900;
+    color: #57c1ff;
+    letter-spacing: 1px;
+    text-shadow: 0 0 15px rgba(87,193,255,0.7);
+}
+
+.hero p {
+    max-width: 700px;
+    margin: 1.2rem auto;
+    font-size: 1.15rem;
+    opacity: 0.85;
+}
+
+/* ------------------------------------------ */
+/*               CAROUSEL (NEW)               */
+/* ------------------------------------------ */
+.carousel-container {
+    width: 100%;
+    max-width: 950px;
+    margin: 0 auto 3.5rem;
+    overflow: hidden;
+    border-radius: 20px;
+    background: rgba(20, 30, 50, 0.35);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.55);
+    border: 1px solid rgba(87,193,255,0.2);
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.7s cubic-bezier(.25,.8,.25,1);
+}
+
+.carousel-slide {
+    min-width: 100%;
+    padding: 3.5rem 2.2rem;
+    text-align: center;
+    color: #e7f5ff;
+}
+
+.carousel-slide h2 {
+    font-size: 2rem;
+    color: #57c1ff;
+    margin-bottom: 1rem;
+    text-shadow: 0 0 10px rgba(87,193,255,0.7);
+}
+
+.carousel-slide p {
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.65;
+    color: #cde7ff;
+}
+
+/* No dots – replaced with neon bars */
+.carousel-indicators {
+    display: flex;
+    justify-content: center;
+    margin-top: 0.8rem;
+    margin-bottom: 2.8rem;
+}
+
+.indicator {
+    height: 6px;
+    width: 40px;
+    margin: 0 5px;
+    background: #1b2b45;
+    border-radius: 40px;
+    transition: 0.3s;
+    cursor: pointer;
+}
+.indicator.active {
+    background: #57c1ff;
+    box-shadow: 0 0 8px #57c1ff;
+}
+
+/* ------------------------------------------ */
+/*             FEATURES GRID (NEW)            */
+/* ------------------------------------------ */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2rem;
+}
+
+.feature-card {
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(10px);
+    padding: 2rem;
+    border-radius: 16px;
+    border: 1px solid rgba(87,193,255,0.25);
+    transition: 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.55);
+}
+
+.feature-card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.75);
+    border-color: rgba(87,193,255,0.6);
+}
+
+.feature-card h3 {
+    font-size: 1.3rem;
+    color: #57c1ff;
+    margin-bottom: 0.7rem;
+    text-shadow: 0 0 8px rgba(87,193,255,0.7);
+}
+
+.feature-card p {
+    font-size: 0.98rem;
+    opacity: 0.87;
+}
+
+/* ------------------------------------------ */
+/*                ACTION BUTTONS              */
+/* ------------------------------------------ */
+.action-buttons {
+    text-align: center;
+    margin-top: 3.5rem;
+}
+
+.button {
+    background: linear-gradient(135deg, #1a60ff, #57c1ff);
+    color: #001020;
+    padding: 0.95rem 2.1rem;
+    border-radius: 10px;
+    font-weight: 700;
+    text-decoration: none;
+    margin: 0 0.6rem;
+    display: inline-block;
+    transition: 0.25s;
+    box-shadow: 0 5px 20px rgba(87,193,255,0.4);
+}
+
+.button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(87,193,255,0.6);
+}
+
+/* Mobile */
+@media(max-width: 768px){
+    .hero h1 { font-size: 2.3rem; }
+    .carousel-slide h2 { font-size: 1.6rem; }
+    .carousel-slide p { font-size: 1rem; }
+}
+
+</style>
+
+<main>
+
+    <div class="hero">
+        <h1>About BlockLoan</h1>
+        <div class="glow-line"></div>
+        <p>Empowering borrowers and lenders with transparent, blockchain-driven microloans protected by cutting-edge cryptography and cyber-secure infrastructure.</p>
+    </div>
+
+    <!-- CAROUSEL -->
+    <div class="carousel-container" id="carousel">
+        <div class="carousel-track">
+            <div class="carousel-slide">
+                <h2>Blockchain-Powered Microloans</h2>
+                <p>Fast, trustless, and secure lending conducted through an immutable ledger verified across decentralized nodes.</p>
+            </div>
+
+            <div class="carousel-slide">
+                <h2>Zero-Leak Privacy Protection</h2>
+                <p>Your personal data is shielded with advanced anonymization and cryptographic protocols.</p>
+            </div>
+
+            <div class="carousel-slide">
+                <h2>Immutable Transaction Ledger</h2>
+                <p>Every event — from loan request to completion — is permanently recorded on-chain.</p>
+            </div>
+
+            <div class="carousel-slide">
+                <h2>Lightning-Fast & Simple</h2>
+                <p>Experience intuitive dashboards, real-time notifications, and instant updates.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Neon Indicators -->
+    <div class="carousel-indicators">
+        <div class="indicator active"></div>
+        <div class="indicator"></div>
+        <div class="indicator"></div>
+        <div class="indicator"></div>
+    </div>
+
+    <!-- FEATURES -->
+    <section class="features-grid">
+        {% for feature in features %}
+        <div class="feature-card">
+            <h3>{{ feature.title }}</h3>
+            <p>{{ feature.desc }}</p>
+        </div>
+        {% endfor %}
+    </section>
+
+    <!-- ACTION BUTTONS -->
+    <div class="action-buttons">
+        <a href="{{ url_for('index') }}" class="button">⟵ Back to Home</a>
+        <a href="{{ url_for('register') }}" class="button">Get Started</a>
+    </div>
+
+</main>
+
+<script>
+/* New Smooth Carousel */
+const track = document.querySelector('.carousel-track');
+const slides = Array.from(track.children);
+const indicators = document.querySelectorAll('.indicator');
+let index = 0;
+
+function moveCarousel(){
+    index = (index + 1) % slides.length;
+    track.style.transform = 'translateX(' + (-index * 100) + '%)';
+    updateIndicators();
+}
+
+function updateIndicators(){
+    indicators.forEach((dot, i) => dot.classList.toggle('active', i === index));
+}
+
+indicators.forEach((dot, i) => {
+    dot.addEventListener('click', () => {
+        index = i;
+        track.style.transform = 'translateX(' + (-index * 100) + '%)';
+        updateIndicators();
+    });
+});
+
+setInterval(moveCarousel, 4300);
+</script>
+
+{% endblock %}
